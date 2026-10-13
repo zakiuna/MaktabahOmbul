@@ -1,0 +1,1699 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Maktabah Syamilah - Perpustakaan Islam Digital</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+:root {
+  --primary: #0d5c3f;
+  --primary-light: #1a7a56;
+  --primary-dark: #073d29;
+  --gold: #c9a84c;
+  --gold-light: #e8c96a;
+  --gold-dark: #a8893a;
+  --bg-dark: #0a1f17;
+  --bg-card: #112b1f;
+  --text-light: #e8f0ec;
+  --text-muted: #9ab8a8;
+  --danger: #c0392b;
+  --radius: 14px;
+  --radius-sm: 8px;
+  --shadow: 0 8px 32px rgba(0,0,0,0.4);
+  --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+html, body {
+  width: 100%; min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: var(--bg-dark);
+  color: var(--text-light);
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+#webgl-bg {
+  position: fixed; top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0; opacity: 0.45;
+  pointer-events: none;
+}
+
+.overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(6px);
+  z-index: 900; opacity: 0; visibility: hidden;
+  transition: var(--transition);
+}
+.overlay.active { opacity: 1; visibility: visible; }
+
+/* HEADER */
+header {
+  position: sticky; top: 0; z-index: 800;
+  background: rgba(10, 31, 23, 0.85);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(201, 168, 76, 0.15);
+  padding: 12px 20px;
+}
+.header-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px;
+}
+.logo { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+.logo-icon {
+  width: 42px; height: 42px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  border-radius: 10px; display: grid; place-items: center;
+  font-size: 22px; box-shadow: 0 4px 15px rgba(201, 168, 76, 0.3);
+  flex-shrink: 0;
+}
+.logo-text h1 {
+  font-size: 1.2rem; font-weight: 700;
+  background: linear-gradient(90deg, var(--gold-light), var(--gold));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; line-height: 1.2;
+}
+.logo-text span {
+  font-size: 0.7rem; color: var(--text-muted);
+  letter-spacing: 2px; text-transform: uppercase;
+}
+.header-actions { display: flex; align-items: center; gap: 10px; }
+
+/* BUTTONS */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 8px; padding: 10px 20px; border: none;
+  border-radius: var(--radius-sm); font-size: 0.9rem; font-weight: 600;
+  cursor: pointer; transition: var(--transition);
+  font-family: inherit; white-space: nowrap;
+}
+.btn:active { transform: scale(0.97); }
+.btn-gold {
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  color: #0a1f17; box-shadow: 0 4px 15px rgba(201, 168, 76, 0.25);
+}
+.btn-gold:hover { box-shadow: 0 6px 25px rgba(201, 168, 76, 0.45); }
+.btn-outline {
+  background: transparent; color: var(--gold);
+  border: 1.5px solid var(--gold);
+}
+.btn-outline:hover { background: rgba(201, 168, 76, 0.1); }
+.btn-danger { background: var(--danger); color: #fff; }
+.btn-danger:hover { background: #a93226; }
+.btn-ghost {
+  background: rgba(255,255,255,0.05); color: var(--text-light);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.btn-ghost:hover { background: rgba(255,255,255,0.1); }
+.btn-sm { padding: 7px 14px; font-size: 0.8rem; }
+.btn-xs { padding: 5px 10px; font-size: 0.72rem; }
+.btn-block { width: 100%; }
+
+/* MAIN */
+main {
+  position: relative; z-index: 1;
+  max-width: 1200px; margin: 0 auto;
+  padding: 24px 20px 100px;
+}
+
+/* HERO */
+.hero { text-align: center; padding: 40px 0 30px; }
+.hero h2 {
+  font-size: clamp(1.6rem, 5vw, 2.6rem);
+  font-weight: 700; margin-bottom: 10px;
+  background: linear-gradient(135deg, #fff 30%, var(--gold-light));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero p {
+  color: var(--text-muted);
+  font-size: clamp(0.85rem, 2.5vw, 1rem);
+  max-width: 600px; margin: 0 auto 24px; line-height: 1.6;
+}
+.search-box { max-width: 560px; margin: 0 auto; position: relative; }
+.search-box input {
+  width: 100%; padding: 15px 50px 15px 20px;
+  border-radius: 50px;
+  border: 1.5px solid rgba(201, 168, 76, 0.25);
+  background: rgba(17, 43, 31, 0.8);
+  backdrop-filter: blur(10px);
+  color: var(--text-light); font-size: 0.95rem;
+  font-family: inherit; outline: none; transition: var(--transition);
+}
+.search-box input:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 4px rgba(201, 168, 76, 0.12);
+}
+.search-box input::placeholder { color: var(--text-muted); }
+.search-box .search-icon {
+  position: absolute; right: 20px; top: 50%;
+  transform: translateY(-50%); color: var(--gold);
+  font-size: 1.1rem; pointer-events: none;
+}
+
+/* STATS */
+.stats {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 12px; max-width: 560px; margin: 0 auto 36px;
+}
+.stat-card {
+  background: rgba(17, 43, 31, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(201, 168, 76, 0.12);
+  border-radius: var(--radius); padding: 16px 8px;
+  text-align: center; transition: var(--transition);
+}
+.stat-card:hover { border-color: rgba(201, 168, 76, 0.3); transform: translateY(-3px); }
+.stat-card .num { font-size: 1.5rem; font-weight: 700; color: var(--gold); }
+.stat-card .label {
+  font-size: 0.7rem; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 1px; margin-top: 4px;
+}
+
+/* SECTION */
+.section-title {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+}
+.section-title h3 { font-size: 1.15rem; font-weight: 600; }
+.section-title .line {
+  flex: 1; height: 1px;
+  background: linear-gradient(90deg, rgba(201,168,76,0.4), transparent);
+}
+
+/* KITAB GRID */
+.kitab-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+.kitab-card {
+  background: linear-gradient(145deg, rgba(17,43,31,0.9), rgba(11,28,20,0.9));
+  border: 1px solid rgba(201, 168, 76, 0.12);
+  border-radius: var(--radius); padding: 20px;
+  cursor: pointer; transition: var(--transition);
+  position: relative; overflow: hidden;
+  animation: fadeInUp 0.4s ease backwards;
+}
+.kitab-card::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; width: 4px; height: 100%;
+  background: linear-gradient(180deg, var(--gold), var(--primary-light));
+  opacity: 0; transition: var(--transition);
+}
+.kitab-card:hover {
+  border-color: rgba(201, 168, 76, 0.35);
+  transform: translateY(-5px);
+  box-shadow: var(--shadow);
+  background: linear-gradient(145deg, rgba(22,56,42,0.95), rgba(13,35,25,0.95));
+}
+.kitab-card:hover::before { opacity: 1; }
+.kitab-card .kitab-icon {
+  width: 46px; height: 46px; border-radius: 12px;
+  background: rgba(201, 168, 76, 0.1);
+  border: 1px solid rgba(201, 168, 76, 0.2);
+  display: grid; place-items: center;
+  font-size: 1.3rem; margin-bottom: 14px;
+}
+.kitab-card h4 {
+  font-size: 1rem; font-weight: 600;
+  margin-bottom: 6px; line-height: 1.4;
+}
+.kitab-card .author {
+  font-size: 0.82rem; color: var(--gold);
+  margin-bottom: 8px; font-style: italic;
+}
+.kitab-card .desc {
+  font-size: 0.78rem; color: var(--text-muted);
+  line-height: 1.6;
+  display: -webkit-box; -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical; overflow: hidden;
+}
+.kitab-card .meta {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: 14px; padding-top: 12px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  font-size: 0.72rem; color: var(--text-muted);
+}
+.kitab-card .badge {
+  padding: 3px 10px; border-radius: 20px;
+  background: rgba(201, 168, 76, 0.12);
+  color: var(--gold-light); font-size: 0.68rem;
+  font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.kitab-card .pdf-badge {
+  position: absolute; top: 12px; right: 12px;
+  padding: 3px 8px; border-radius: 6px;
+  background: rgba(192, 57, 43, 0.9);
+  color: #fff; font-size: 0.62rem;
+  font-weight: 700; letter-spacing: 0.5px;
+}
+.kitab-card .bab-badge {
+  position: absolute; top: 12px; right: 12px;
+  padding: 3px 8px; border-radius: 6px;
+  background: rgba(39, 174, 96, 0.9);
+  color: #fff; font-size: 0.62rem;
+  font-weight: 700; letter-spacing: 0.5px;
+}
+
+/* EMPTY */
+.empty-state {
+  text-align: center; padding: 60px 20px;
+  color: var(--text-muted); display: none;
+}
+.empty-state .icon { font-size: 3rem; margin-bottom: 16px; opacity: 0.5; }
+
+/* MODAL */
+.modal {
+  position: fixed; inset: 0; z-index: 1000;
+  display: grid; place-items: center;
+  padding: 16px; opacity: 0; visibility: hidden;
+  transition: var(--transition);
+}
+.modal.active { opacity: 1; visibility: visible; }
+.modal-content {
+  background: linear-gradient(160deg, #122b1f, #0a1f17);
+  border: 1px solid rgba(201, 168, 76, 0.2);
+  border-radius: var(--radius);
+  width: 100%; max-width: 480px;
+  max-height: 90vh; overflow-y: auto;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+  transform: scale(0.92) translateY(20px);
+  transition: var(--transition);
+  position: relative; z-index: 1001;
+}
+.modal-content.lg { max-width: 900px; }
+.modal.active .modal-content { transform: scale(1) translateY(0); }
+.modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid rgba(201, 168, 76, 0.12);
+  position: sticky; top: 0;
+  background: linear-gradient(160deg, #122b1f, #0e2419);
+  z-index: 2;
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+.modal-header h3 {
+  font-size: 1.05rem; font-weight: 600; color: var(--gold-light);
+  display: flex; align-items: center; gap: 10px;
+}
+.modal-close {
+  width: 34px; height: 34px; border-radius: 50%;
+  border: none; background: rgba(255,255,255,0.06);
+  color: var(--text-light); font-size: 1.1rem;
+  cursor: pointer; display: grid; place-items: center;
+  transition: var(--transition); flex-shrink: 0;
+}
+.modal-close:hover { background: rgba(192,57,43,0.3); color: #fff; }
+.modal-body { padding: 24px; }
+
+/* FORM */
+.form-group { margin-bottom: 16px; }
+.form-group label {
+  display: block; font-size: 0.82rem; font-weight: 600;
+  color: var(--gold-light); margin-bottom: 7px;
+  letter-spacing: 0.3px;
+}
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%; padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid rgba(201, 168, 76, 0.18);
+  background: rgba(10, 31, 23, 0.7);
+  color: var(--text-light); font-size: 0.9rem;
+  font-family: inherit; outline: none;
+  transition: var(--transition); resize: vertical;
+}
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.1);
+  background: rgba(10, 31, 23, 0.95);
+}
+.form-group textarea { min-height: 100px; line-height: 1.6; }
+.form-group select option { background: #0a1f17; color: var(--text-light); }
+
+/* TABS FORM */
+.form-tabs {
+  display: flex; gap: 8px; margin-bottom: 20px;
+  background: rgba(10, 31, 23, 0.6);
+  padding: 5px; border-radius: var(--radius-sm);
+  border: 1px solid rgba(201, 168, 76, 0.1);
+}
+.form-tab {
+  flex: 1; padding: 10px;
+  border: none; background: transparent;
+  color: var(--text-muted); font-size: 0.82rem;
+  font-weight: 600; cursor: pointer;
+  border-radius: 6px; transition: var(--transition);
+  font-family: inherit;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.form-tab:hover { color: var(--text-light); }
+.form-tab.active {
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  color: #0a1f17;
+}
+
+.form-panel { display: none; }
+.form-panel.active { display: block; animation: fadeIn 0.3s ease; }
+
+/* BAB EDITOR */
+.bab-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 12px; }
+.bab-item {
+  background: rgba(10, 31, 23, 0.6);
+  border: 1px solid rgba(201, 168, 76, 0.15);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  position: relative;
+}
+.bab-item-header {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
+}
+.bab-num {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  color: #0a1f17; font-size: 0.8rem; font-weight: 700;
+  display: grid; place-items: center; flex-shrink: 0;
+}
+.bab-item input.bab-title {
+  flex: 1; padding: 8px 10px;
+  background: rgba(10, 31, 23, 0.9);
+  border: 1px solid rgba(201, 168, 76, 0.2);
+  border-radius: 6px; color: var(--text-light);
+  font-size: 0.85rem; font-family: inherit; outline: none;
+}
+.bab-item input.bab-title:focus { border-color: var(--gold); }
+.bab-item textarea {
+  width: 100%; padding: 10px 12px;
+  background: rgba(10, 31, 23, 0.9);
+  border: 1px solid rgba(201, 168, 76, 0.2);
+  border-radius: 6px; color: var(--text-light);
+  font-size: 0.85rem; font-family: inherit;
+  outline: none; min-height: 90px; resize: vertical;
+  line-height: 1.7;
+}
+.bab-item textarea:focus { border-color: var(--gold); }
+.bab-item textarea.arabic {
+  direction: rtl; text-align: right;
+  font-family: 'Traditional Arabic', 'Amiri', 'Scheherazade', serif;
+  font-size: 1.15rem; line-height: 2;
+}
+.bab-item .bab-actions {
+  display: flex; gap: 6px; margin-top: 10px;
+  justify-content: flex-end;
+}
+.bab-remove {
+  background: rgba(192,57,43,0.2); color: #ff8a7a;
+  border: 1px solid rgba(192,57,43,0.4);
+  width: 30px; height: 30px; border-radius: 6px;
+  cursor: pointer; font-size: 0.9rem;
+  display: grid; place-items: center;
+  transition: var(--transition);
+}
+.bab-remove:hover { background: var(--danger); color: #fff; }
+.bab-move {
+  background: rgba(201,168,76,0.15); color: var(--gold-light);
+  border: 1px solid rgba(201,168,76,0.3);
+  width: 30px; height: 30px; border-radius: 6px;
+  cursor: pointer; font-size: 0.8rem;
+  display: grid; place-items: center;
+  transition: var(--transition);
+}
+.bab-move:hover { background: rgba(201,168,76,0.3); }
+
+/* FILE UPLOAD */
+.upload-zone {
+  border: 2px dashed rgba(201, 168, 76, 0.35);
+  border-radius: var(--radius);
+  padding: 30px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition);
+  background: rgba(10, 31, 23, 0.4);
+}
+.upload-zone:hover, .upload-zone.dragover {
+  border-color: var(--gold);
+  background: rgba(201, 168, 76, 0.08);
+}
+.upload-zone .icon { font-size: 2.5rem; margin-bottom: 10px; }
+.upload-zone p { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 6px; }
+.upload-zone strong { color: var(--gold-light); }
+.upload-zone .hint { font-size: 0.72rem; color: var(--text-muted); }
+.upload-preview {
+  display: none; margin-top: 12px;
+  padding: 12px; border-radius: var(--radius-sm);
+  background: rgba(201, 168, 76, 0.08);
+  border: 1px solid rgba(201, 168, 76, 0.2);
+  align-items: center; gap: 10px;
+}
+.upload-preview.show { display: flex; }
+.upload-preview .file-icon { font-size: 1.6rem; }
+.upload-preview .file-info { flex: 1; min-width: 0; }
+.upload-preview .file-name {
+  font-size: 0.82rem; color: var(--text-light);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.upload-preview .file-size { font-size: 0.7rem; color: var(--text-muted); }
+
+/* DETAIL KITAB */
+.detail-info {
+  display: flex; flex-wrap: wrap; gap: 10px;
+  margin-bottom: 18px; padding-bottom: 18px;
+  border-bottom: 1px solid rgba(201, 168, 76, 0.12);
+}
+.detail-info .chip {
+  padding: 5px 12px; border-radius: 20px;
+  background: rgba(201, 168, 76, 0.1);
+  border: 1px solid rgba(201, 168, 76, 0.2);
+  font-size: 0.75rem; color: var(--gold-light);
+}
+
+/* BAB NAVIGATION */
+.bab-nav {
+  display: flex; gap: 6px; overflow-x: auto;
+  padding-bottom: 10px; margin-bottom: 16px;
+  border-bottom: 1px solid rgba(201, 168, 76, 0.1);
+  scrollbar-width: thin;
+}
+.bab-nav::-webkit-scrollbar { height: 4px; }
+.bab-nav::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 2px; }
+.bab-nav-btn {
+  padding: 8px 14px; border-radius: 8px;
+  background: rgba(201, 168, 76, 0.08);
+  border: 1px solid rgba(201, 168, 76, 0.15);
+  color: var(--text-muted); font-size: 0.78rem;
+  font-weight: 600; cursor: pointer;
+  transition: var(--transition); white-space: nowrap;
+  font-family: inherit;
+}
+.bab-nav-btn:hover { color: var(--text-light); border-color: rgba(201,168,76,0.4); }
+.bab-nav-btn.active {
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  color: #0a1f17; border-color: transparent;
+}
+
+/* BAB CONTENT */
+.bab-content {
+  animation: fadeIn 0.3s ease;
+}
+.bab-content-title {
+  font-size: 1.1rem; font-weight: 700;
+  color: var(--gold-light); margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(201, 168, 76, 0.15);
+  display: flex; align-items: center; gap: 10px;
+}
+.bab-content-title .num-badge {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  color: #0a1f17; font-size: 0.8rem; font-weight: 700;
+  display: grid; place-items: center; flex-shrink: 0;
+}
+.bab-content-text {
+  font-size: 0.95rem; line-height: 1.9;
+  color: var(--text-light); white-space: pre-wrap;
+  text-align: justify;
+}
+.bab-content-text.arabic {
+  direction: rtl; text-align: right;
+  font-family: 'Traditional Arabic', 'Amiri', 'Scheherazade New', 'Noto Naskh Arabic', serif;
+  font-size: 1.35rem; line-height: 2.2;
+  letter-spacing: 0.5px;
+}
+
+/* BILINGUAL */
+.bab-bilingual {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 20px; margin-top: 10px;
+}
+.bab-bilingual .arabic-col {
+  direction: rtl; text-align: right;
+  font-family: 'Traditional Arabic', 'Amiri', serif;
+  font-size: 1.35rem; line-height: 2.2;
+}
+.bab-bilingual .latin-col {
+  font-size: 0.92rem; line-height: 1.9;
+  color: var(--text-light);
+}
+.bab-bilingual .col-label {
+  font-size: 0.72rem; color: var(--gold);
+  text-transform: uppercase; letter-spacing: 1px;
+  margin-bottom: 8px; font-weight: 700;
+}
+
+/* PDF VIEWER */
+.pdf-container {
+  width: 100%; height: 65vh;
+  border: 1px solid rgba(201, 168, 76, 0.2);
+  border-radius: var(--radius-sm);
+  overflow: hidden; background: #fff;
+}
+.pdf-container iframe, .pdf-container embed {
+  width: 100%; height: 100%; border: none;
+}
+.pdf-actions {
+  display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap;
+}
+
+/* ADMIN */
+.admin-badge {
+  display: none; align-items: center; gap: 6px;
+  padding: 6px 14px; border-radius: 20px;
+  background: rgba(201, 168, 76, 0.12);
+  border: 1px solid rgba(201, 168, 76, 0.25);
+  font-size: 0.75rem; color: var(--gold-light);
+  font-weight: 600;
+}
+.admin-badge.show { display: inline-flex; }
+.admin-controls {
+  display: none; position: fixed;
+  bottom: 20px; right: 20px; z-index: 700;
+  flex-direction: column; gap: 10px;
+}
+.admin-controls.show { display: flex; }
+.fab {
+  width: 54px; height: 54px; border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  color: #0a1f17; font-size: 1.4rem; cursor: pointer;
+  box-shadow: 0 6px 25px rgba(201, 168, 76, 0.4);
+  display: grid; place-items: center;
+  transition: var(--transition);
+}
+.fab:hover { transform: scale(1.08) rotate(90deg); }
+
+/* TOAST */
+.toast-container {
+  position: fixed; top: 80px; right: 20px;
+  z-index: 2000; display: flex;
+  flex-direction: column; gap: 10px;
+  pointer-events: none;
+}
+.toast {
+  background: linear-gradient(135deg, #122b1f, #0a1f17);
+  border: 1px solid rgba(201, 168, 76, 0.3);
+  border-left: 4px solid var(--gold);
+  border-radius: var(--radius-sm);
+  padding: 14px 20px; color: var(--text-light);
+  font-size: 0.85rem; box-shadow: var(--shadow);
+  animation: slideInRight 0.3s ease;
+  max-width: 320px; pointer-events: auto;
+}
+.toast.error { border-left-color: var(--danger); }
+.toast.success { border-left-color: #27ae60; }
+.toast.info { border-left-color: #3498db; }
+
+@keyframes slideInRight {
+  from { transform: translateX(120%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(5px); }
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-dark); }
+::-webkit-scrollbar-thumb { background: var(--primary-light); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold-dark); }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .bab-bilingual { grid-template-columns: 1fr; }
+  .bab-bilingual .arabic-col { border-bottom: 1px solid rgba(201,168,76,0.15); padding-bottom: 14px; }
+}
+@media (max-width: 640px) {
+  header { padding: 10px 14px; }
+  .logo-icon { width: 36px; height: 36px; font-size: 18px; }
+  .logo-text h1 { font-size: 1rem; }
+  .logo-text span { font-size: 0.6rem; letter-spacing: 1px; }
+  main { padding: 16px 14px 90px; }
+  .hero { padding: 24px 0 20px; }
+  .kitab-grid { grid-template-columns: 1fr; gap: 12px; }
+  .stats { gap: 8px; }
+  .stat-card { padding: 12px 6px; }
+  .stat-card .num { font-size: 1.2rem; }
+  .stat-card .label { font-size: 0.6rem; }
+  .btn { padding: 9px 16px; font-size: 0.82rem; }
+  .modal-header { padding: 16px 18px; }
+  .modal-body { padding: 18px; }
+  .admin-controls { bottom: 14px; right: 14px; }
+  .fab { width: 48px; height: 48px; font-size: 1.2rem; }
+  .toast-container { top: 70px; right: 12px; left: 12px; }
+  .toast { max-width: 100%; }
+  .bab-content-text.arabic { font-size: 1.2rem; }
+  .bab-bilingual .arabic-col { font-size: 1.2rem; }
+  .pdf-container { height: 55vh; }
+  .form-tabs { flex-wrap: wrap; }
+}
+@media (max-width: 380px) {
+  .header-actions .btn span.btn-text { display: none; }
+  .header-actions .btn { padding: 9px 12px; }
+}
+
+.loader {
+  display: inline-block; width: 16px; height: 16px;
+  border: 2px solid rgba(10,31,23,0.3);
+  border-top-color: #0a1f17;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<canvas id="webgl-bg"></canvas>
+<div class="overlay" id="overlay"></div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="logo" onclick="scrollTo({top:0,behavior:'smooth'})">
+      <div class="logo-icon">📚</div>
+      <div class="logo-text">
+        <h1>Maktabah Syamilah</h1>
+        <span>Perpustakaan Islam Digital</span>
+      </div>
+    </div>
+    <div class="header-actions">
+      <span class="admin-badge" id="adminBadge">👑 Admin</span>
+      <button class="btn btn-outline btn-sm" id="loginBtn" onclick="openLoginModal()">
+        <span>🔐</span> <span class="btn-text">Login Admin</span>
+      </button>
+      <button class="btn btn-danger btn-sm" id="logoutBtn" style="display:none" onclick="logout()">
+        <span>🚪</span> <span class="btn-text">Logout</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <h2>Koleksi Kitab & Turats Islam</h2>
+    <p>Jelajahi khazanah keilmuan Islam klasik dan modern. Dikelola secara digital untuk generasi masa kini.</p>
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Cari kitab, penulis, atau kategori..." autocomplete="off">
+      <span class="search-icon">🔍</span>
+    </div>
+  </section>
+
+  <div class="stats">
+    <div class="stat-card"><div class="num" id="statKitab">0</div><div class="label">Kitab</div></div>
+    <div class="stat-card"><div class="num" id="statKategori">0</div><div class="label">Kategori</div></div>
+    <div class="stat-card"><div class="num" id="statPenulis">0</div><div class="label">Penulis</div></div>
+  </div>
+
+  <section>
+    <div class="section-title">
+      <h3>📖 Daftar Kitab</h3>
+      <div class="line"></div>
+    </div>
+    <div class="kitab-grid" id="kitabGrid"></div>
+    <div class="empty-state" id="emptyState">
+      <div class="icon">📭</div>
+      <p>Belum ada kitab yang tersedia.<br>Silakan login sebagai admin untuk menambahkan.</p>
+    </div>
+  </section>
+</main>
+
+<div class="admin-controls" id="adminControls">
+  <button class="fab" onclick="openKitabForm()" title="Tambah Kitab">＋</button>
+</div>
+
+<!-- LOGIN MODAL -->
+<div class="modal" id="loginModal">
+  <div class="modal-content" style="max-width:400px">
+    <div class="modal-header">
+      <h3>🔐 Login Admin</h3>
+      <button class="modal-close" onclick="closeModal('loginModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <form id="loginForm" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" id="username" placeholder="Masukkan username" required>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="password" placeholder="Masukkan password" required>
+        </div>
+        <div class="form-error" id="loginError" style="display:none;color:#ff6b5e;font-size:0.78rem;margin-top:6px">Username atau password salah!</div>
+        <button type="submit" class="btn btn-gold btn-block" id="loginSubmitBtn" style="margin-top:8px">Masuk</button>
+        <p style="text-align:center;font-size:0.72rem;color:var(--text-muted);margin-top:16px">
+          Default: <strong>admin</strong> / <strong>admin123</strong>
+        </p>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- KITAB FORM MODAL -->
+<div class="modal" id="kitabModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 id="kitabModalTitle">➕ Tambah Kitab</h3>
+      <button class="modal-close" onclick="closeModal('kitabModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <form id="kitabForm" onsubmit="handleKitabSubmit(event)">
+        <input type="hidden" id="kitabId">
+
+        <!-- Info Dasar -->
+        <div class="form-group">
+          <label>Judul Kitab *</label>
+          <input type="text" id="kitabJudul" placeholder="Contoh: Shahih Bukhari" required>
+        </div>
+        <div class="form-group">
+          <label>Penulis *</label>
+          <input type="text" id="kitabPenulis" placeholder="Contoh: Imam Bukhari" required>
+        </div>
+        <div class="form-group">
+          <label>Kategori *</label>
+          <input type="text" id="kitabKategori" placeholder="Contoh: Hadits" list="kategoriList" required>
+          <datalist id="kategoriList"></datalist>
+        </div>
+        <div class="form-group">
+          <label>Deskripsi Singkat</label>
+          <textarea id="kitabDeskripsi" placeholder="Deskripsi singkat tentang kitab..." style="min-height:70px"></textarea>
+        </div>
+
+        <!-- Tabs: Per Bab / Upload PDF -->
+        <div class="form-tabs">
+          <button type="button" class="form-tab active" onclick="switchFormTab('bab')">📑 Per Bab</button>
+          <button type="button" class="form-tab" onclick="switchFormTab('pdf')">📄 Upload PDF</button>
+        </div>
+
+        <!-- Panel Per Bab -->
+        <div class="form-panel active" id="panel-bab">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+            <label style="font-size:0.82rem;font-weight:600;color:var(--gold-light)">Daftar Bab</label>
+            <button type="button" class="btn btn-gold btn-xs" onclick="addBabItem()">＋ Tambah Bab</button>
+          </div>
+          <div class="bab-list" id="babList"></div>
+          <p style="font-size:0.72rem;color:var(--text-muted);text-align:center;padding:10px">
+            Belum ada bab. Klik "Tambah Bab" untuk mulai.
+          </p>
+        </div>
+
+        <!-- Panel PDF -->
+        <div class="form-panel" id="panel-pdf">
+          <div class="upload-zone" id="uploadZone" onclick="document.getElementById('pdfInput').click()">
+            <div class="icon">📄</div>
+            <p>Klik atau <strong>drag & drop</strong> file PDF di sini</p>
+            <p class="hint">Maksimal 5MB • Hanya format .pdf</p>
+          </div>
+          <input type="file" id="pdfInput" accept="application/pdf" style="display:none" onchange="handlePdfUpload(event)">
+          <div class="upload-preview" id="uploadPreview">
+            <div class="file-icon">📕</div>
+            <div class="file-info">
+              <div class="file-name" id="pdfName">-</div>
+              <div class="file-size" id="pdfSize">-</div>
+            </div>
+            <button type="button" class="btn btn-danger btn-xs" onclick="removePdf()">Hapus</button>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:10px;margin-top:20px">
+          <button type="button" class="btn btn-ghost btn-block" onclick="closeModal('kitabModal')">Batal</button>
+          <button type="submit" class="btn btn-gold btn-block" id="kitabSubmitBtn">Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="modal" id="detailModal">
+  <div class="modal-content lg">
+    <div class="modal-header">
+      <h3 id="detailTitle">📖 Detail Kitab</h3>
+      <button class="modal-close" onclick="closeModal('detailModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="detail-info" id="detailInfo"></div>
+      <div id="detailBody"></div>
+      <div id="detailAdminActions" style="display:none;gap:10px;margin-top:20px;padding-top:16px;border-top:1px solid rgba(201,168,76,0.12)">
+        <button class="btn btn-outline btn-block" onclick="editFromDetail()">✏️ Edit Kitab</button>
+        <button class="btn btn-danger btn-block" onclick="deleteFromDetail()">🗑️ Hapus Kitab</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM MODAL -->
+<div class="modal" id="confirmModal">
+  <div class="modal-content" style="max-width:380px">
+    <div class="modal-header">
+      <h3>⚠️ Konfirmasi</h3>
+      <button class="modal-close" onclick="closeModal('confirmModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p id="confirmText" style="color:var(--text-light);font-size:0.9rem;line-height:1.6;margin-bottom:20px">Apakah Anda yakin?</p>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-ghost btn-block" onclick="closeModal('confirmModal')">Batal</button>
+        <button class="btn btn-danger btn-block" id="confirmBtn">Hapus</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+/* ============================================================
+   WEBGL BACKGROUND
+   ============================================================ */
+(function initWebGL() {
+  const canvas = document.getElementById('webgl-bg');
+  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+  if (!gl) { canvas.style.display = 'none'; return; }
+
+  const vsSource = `
+    attribute vec2 a_position;
+    attribute float a_size;
+    attribute vec3 a_color;
+    uniform vec2 u_resolution;
+    uniform float u_time;
+    varying vec3 v_color;
+    void main() {
+      vec2 pos = a_position;
+      pos.x += sin(u_time * 0.3 + a_position.y * 3.0) * 0.03;
+      pos.y += cos(u_time * 0.25 + a_position.x * 3.0) * 0.03;
+      vec2 clip = (pos * 2.0 - 1.0);
+      clip.x *= u_resolution.x / u_resolution.y;
+      gl_Position = vec4(clip, 0.0, 1.0);
+      gl_PointSize = a_size * (u_resolution.y / 800.0);
+      v_color = a_color;
+    }
+  `;
+  const fsSource = `
+    precision mediump float;
+    varying vec3 v_color;
+    void main() {
+      vec2 c = gl_PointCoord - vec2(0.5);
+      float d = length(c);
+      if (d > 0.5) discard;
+      float alpha = smoothstep(0.5, 0.1, d);
+      gl_FragColor = vec4(v_color, alpha * 0.8);
+    }
+  `;
+
+  function createShader(type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) return null;
+    return s;
+  }
+  const vs = createShader(gl.VERTEX_SHADER, vsSource);
+  const fs = createShader(gl.FRAGMENT_SHADER, fsSource);
+  if (!vs || !fs) return;
+
+  const program = gl.createProgram();
+  gl.attachShader(program, vs);
+  gl.attachShader(program, fs);
+  gl.linkProgram(program);
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) return;
+  gl.useProgram(program);
+
+  const COUNT = 180;
+  const positions = new Float32Array(COUNT * 2);
+  const sizes = new Float32Array(COUNT);
+  const colors = new Float32Array(COUNT * 3);
+  const palette = [
+    [0.79, 0.66, 0.30], [0.10, 0.48, 0.34],
+    [0.91, 0.79, 0.42], [0.06, 0.24, 0.17],
+  ];
+  for (let i = 0; i < COUNT; i++) {
+    positions[i*2] = Math.random();
+    positions[i*2+1] = Math.random();
+    sizes[i] = 2 + Math.random() * 6;
+    const c = palette[Math.floor(Math.random() * palette.length)];
+    colors[i*3] = c[0]; colors[i*3+1] = c[1]; colors[i*3+2] = c[2];
+  }
+  function makeBuffer(data) {
+    const buf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
+    return buf;
+  }
+  const posBuf = makeBuffer(positions);
+  const sizeBuf = makeBuffer(sizes);
+  const colBuf = makeBuffer(colors);
+  const aPosition = gl.getAttribLocation(program, 'a_position');
+  const aSize = gl.getAttribLocation(program, 'a_size');
+  const aColor = gl.getAttribLocation(program, 'a_color');
+  const uResolution = gl.getUniformLocation(program, 'u_resolution');
+  const uTime = gl.getUniformLocation(program, 'u_time');
+
+  function resize() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = window.innerWidth * dpr;
+    canvas.height = window.innerHeight * dpr;
+    canvas.style.width = window.innerWidth + 'px';
+    canvas.style.height = window.innerHeight + 'px';
+    gl.viewport(0, 0, canvas.width, canvas.height);
+  }
+  window.addEventListener('resize', resize);
+  resize();
+  gl.enable(gl.BLEND);
+  gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+  const start = performance.now();
+  function render(now) {
+    const t = (now - start) * 0.001;
+    gl.clearColor(0.04, 0.12, 0.09, 1.0);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.useProgram(program);
+    gl.bindBuffer(gl.ARRAY_BUFFER, posBuf);
+    gl.enableVertexAttribArray(aPosition);
+    gl.vertexAttribPointer(aPosition, 2, gl.FLOAT, false, 0, 0);
+    gl.bindBuffer(gl.ARRAY_BUFFER, sizeBuf);
+    gl.enableVertexAttribArray(aSize);
+    gl.vertexAttribPointer(aSize, 1, gl.FLOAT, false, 0, 0);
+    gl.bindBuffer(gl.ARRAY_BUFFER, colBuf);
+    gl.enableVertexAttribArray(aColor);
+    gl.vertexAttribPointer(aColor, 3, gl.FLOAT, false, 0, 0);
+    gl.uniform2f(uResolution, canvas.width, canvas.height);
+    gl.uniform1f(uTime, t);
+    gl.drawArrays(gl.POINTS, 0, COUNT);
+    requestAnimationFrame(render);
+  }
+  requestAnimationFrame(render);
+})();
+
+/* ============================================================
+   STORAGE
+   ============================================================ */
+const STORAGE_KEY = 'maktabah_syamilah_data_v2';
+const AUTH_KEY = 'maktabah_syamilah_auth';
+const ADMIN_CREDENTIALS = { username: 'admin', password: 'admin123' };
+
+// Data default dengan bab + PDF contoh
+const DEFAULT_DATA = [
+  {
+    id: 'kitab-1',
+    judul: 'Shahih Bukhari',
+    penulis: 'Imam Bukhari',
+    kategori: 'Hadits',
+    deskripsi: 'Kumpulan hadits shahih yang paling otentik setelah Al-Qur\'an.',
+    tipe: 'bab',
+    babs: [
+      {
+        judul: 'Bab 1: Permulaan Wahyu',
+        arabic: 'بَابُ كَيْفَ كَانَ بَدْءُ الْوَحْيِ إِلَى رَسُولِ اللَّهِ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ',
+        latin: 'Diriwayatkan dari Aisyah radhiyallahu \'anha, bahwa Al-Harits bin Hisyam bertanya kepada Rasulullah shallallahu \'alaihi wa sallam: "Wahai Rasulullah, bagaimana wahyu datang kepadamu?" Beliau menjawab: "Kadang-kadang datang kepadaku seperti bunyi lonceng..."'
+      },
+      {
+        judul: 'Bab 2: Keutamaan Ilmu',
+        arabic: 'بَابُ فَضْلِ الْعِلْمِ',
+        latin: 'Rasulullah shallallahu \'alaihi wa sallam bersabda: "Barangsiapa menempuh jalan untuk mencari ilmu, maka Allah akan memudahkan baginya jalan menuju surga." (HR. Muslim)'
+      },
+      {
+        judul: 'Bab 3: Niat dalam Beramal',
+        arabic: 'بَابُ النِّيَّةِ فِي الْأَعْمَالِ',
+        latin: 'Dari Umar bin Al-Khaththab radhiyallahu \'anhu, Rasulullah shallallahu \'alaihi wa sallam bersabda: "Sesungguhnya setiap amal tergantung pada niatnya, dan setiap orang akan mendapatkan sesuai apa yang ia niatkan."'
+      }
+    ],
+    pdfData: null,
+    pdfName: null,
+    tanggal: '2024-01-15'
+  },
+  {
+    id: 'kitab-2',
+    judul: 'Riyadhus Shalihin',
+    penulis: 'Imam An-Nawawi',
+    kategori: 'Akhlak',
+    deskripsi: 'Kumpulan hadits tentang akhlak dan adab seorang Muslim.',
+    tipe: 'bab',
+    babs: [
+      {
+        judul: 'Bab 1: Ikhlas dan Menghadirkan Niat',
+        arabic: 'بَابُ الْإِخْلَاصِ وَاحْتِسَابِ النِّيَّةِ',
+        latin: 'Allah Ta\'ala berfirman: "Dan mereka tidak diperintahkan kecuali untuk menyembah Allah dengan ikhlas..." (QS. Al-Bayyinah: 5)'
+      },
+      {
+        judul: 'Bab 2: Taubat',
+        arabic: 'بَابُ التَّوْبَةِ',
+        latin: 'Allah Ta\'ala berfirman: "Dan bertaubatlah kamu sekalian kepada Allah, hai orang-orang mukmin supaya kamu beruntung." (QS. An-Nur: 31)'
+      }
+    ],
+    pdfData: null,
+    pdfName: null,
+    tanggal: '2024-02-20'
+  },
+  {
+    id: 'kitab-3',
+    judul: 'Tafsir Jalalain',
+    penulis: 'Jalaluddin Al-Mahalli & As-Suyuti',
+    kategori: 'Tafsir',
+    deskripsi: 'Tafsir Al-Qur\'an yang ringkas dan mudah dipahami.',
+    tipe: 'pdf',
+    babs: [],
+    pdfData: null,
+    pdfName: null,
+    pdfUrl: null,
+    tanggal: '2024-03-10'
+  }
+];
+
+let kitabList = [];
+let isAdmin = false;
+let currentDetailId = null;
+let currentDetailBab = 0;
+let confirmCallback = null;
+let babCounter = 0;
+let currentPdfData = null;
+let currentPdfName = null;
+
+/* ============================================================
+   STORAGE FUNCS
+   ============================================================ */
+function loadData() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) kitabList = JSON.parse(raw);
+    else { kitabList = JSON.parse(JSON.stringify(DEFAULT_DATA)); saveData(); }
+  } catch (e) { kitabList = JSON.parse(JSON.stringify(DEFAULT_DATA)); }
+}
+function saveData() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(kitabList)); }
+  catch (e) {
+    showToast('Penyimpanan penuh! PDF terlalu besar. Coba file yang lebih kecil.', 'error');
+  }
+}
+function loadAuth() {
+  try { isAdmin = localStorage.getItem(AUTH_KEY) === 'true'; } catch { isAdmin = false; }
+  updateAuthUI();
+}
+function saveAuth() {
+  localStorage.setItem(AUTH_KEY, isAdmin ? 'true' : 'false');
+  updateAuthUI();
+}
+
+/* ============================================================
+   AUTH UI
+   ============================================================ */
+function updateAuthUI() {
+  const loginBtn = document.getElementById('loginBtn');
+  const logoutBtn = document.getElementById('logoutBtn');
+  const adminBadge = document.getElementById('adminBadge');
+  const adminControls = document.getElementById('adminControls');
+  if (isAdmin) {
+    loginBtn.style.display = 'none';
+    logoutBtn.style.display = 'inline-flex';
+    adminBadge.classList.add('show');
+    adminControls.classList.add('show');
+  } else {
+    loginBtn.style.display = 'inline-flex';
+    logoutBtn.style.display = 'none';
+    adminBadge.classList.remove('show');
+    adminControls.classList.remove('show');
+  }
+  renderKitab();
+}
+
+/* ============================================================
+   RENDER KITAB
+   ============================================================ */
+function renderKitab(filter = '') {
+  const grid = document.getElementById('kitabGrid');
+  const emptyState = document.getElementById('emptyState');
+  const query = filter.toLowerCase().trim();
+  let filtered = kitabList;
+
+  if (query) {
+    filtered = kitabList.filter(k =>
+      k.judul.toLowerCase().includes(query) ||
+      k.penulis.toLowerCase().includes(query) ||
+      k.kategori.toLowerCase().includes(query) ||
+      (k.deskripsi && k.deskripsi.toLowerCase().includes(query)) ||
+      (k.babs && k.babs.some(b => b.judul.toLowerCase().includes(query)))
+    );
+  }
+
+  document.getElementById('statKitab').textContent = kitabList.length;
+  document.getElementById('statKategori').textContent = new Set(kitabList.map(k => k.kategori)).size;
+  document.getElementById('statPenulis').textContent = new Set(kitabList.map(k => k.penulis)).size;
+
+  const datalist = document.getElementById('kategoriList');
+  datalist.innerHTML = '';
+  [...new Set(kitabList.map(k => k.kategori))].forEach(k => {
+    const opt = document.createElement('option');
+    opt.value = k; datalist.appendChild(opt);
+  });
+
+  if (filtered.length === 0) {
+    grid.innerHTML = '';
+    emptyState.style.display = 'block';
+    emptyState.querySelector('p').innerHTML = query
+      ? `Tidak ada kitab yang cocok dengan pencarian "<strong>${escapeHtml(filter)}</strong>".`
+      : 'Belum ada kitab yang tersedia.<br>Silakan login sebagai admin untuk menambahkan.';
+    return;
+  }
+  emptyState.style.display = 'none';
+  grid.innerHTML = '';
+
+  filtered.forEach((kitab, i) => {
+    const card = document.createElement('div');
+    card.className = 'kitab-card';
+    card.style.animationDelay = (i * 0.05) + 's';
+    card.onclick = () => openDetail(kitab.id);
+
+    let badge = '';
+    if (kitab.tipe === 'pdf') badge = '<span class="pdf-badge">📄 PDF</span>';
+    else if (kitab.babs && kitab.babs.length > 0) badge = `<span class="bab-badge">📑 ${kitab.babs.length} Bab</span>`;
+
+    card.innerHTML = `
+      ${badge}
+      <div class="kitab-icon">${getKategoriIcon(kitab.kategori)}</div>
+      <h4>${escapeHtml(kitab.judul)}</h4>
+      <div class="author">${escapeHtml(kitab.penulis)}</div>
+      <div class="desc">${escapeHtml(kitab.deskripsi || 'Tidak ada deskripsi.')}</div>
+      <div class="meta">
+        <span class="badge">${escapeHtml(kitab.kategori)}</span>
+        <span>${formatTanggal(kitab.tanggal)}</span>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function getKategoriIcon(k) {
+  const map = {
+    'hadits':'📜','tafsir':'📖','fiqih':'⚖️','akhlak':'💎',
+    'sejarah':'🏛️','tauhid':'🕌','nahwu':'📝','sharaf':'🔤','ushul':'🧭'
+  };
+  return map[(k||'').toLowerCase()] || '📚';
+}
+function formatTanggal(tgl) {
+  if (!tgl) return '-';
+  try {
+    const d = new Date(tgl);
+    return d.toLocaleDateString('id-ID', { day:'numeric', month:'short', year:'numeric' });
+  } catch { return tgl; }
+}
+function escapeHtml(str) {
+  if (!str) return '';
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+function formatBytes(bytes) {
+  if (!bytes) return '0 B';
+  const k = 1024;
+  const sizes = ['B','KB','MB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return (bytes / Math.pow(k, i)).toFixed(1) + ' ' + sizes[i];
+}
+
+/* ============================================================
+   MODAL
+   ============================================================ */
+function openModal(id) {
+  document.getElementById('overlay').classList.add('active');
+  document.getElementById(id).classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('active');
+  const anyOpen = document.querySelector('.modal.active');
+  if (!anyOpen) {
+    document.getElementById('overlay').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+}
+document.getElementById('overlay').addEventListener('click', () => {
+  document.querySelectorAll('.modal.active').forEach(m => m.classList.remove('active'));
+  document.getElementById('overlay').classList.remove('active');
+  document.body.style.overflow = '';
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.modal.active').forEach(m => m.classList.remove('active'));
+    document.getElementById('overlay').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+});
+
+/* ============================================================
+   AUTH
+   ============================================================ */
+function openLoginModal() {
+  document.getElementById('loginForm').reset();
+  document.getElementById('loginError').style.display = 'none';
+  openModal('loginModal');
+  setTimeout(() => document.getElementById('username').focus(), 300);
+}
+function handleLogin(e) {
+  e.preventDefault();
+  const u = document.getElementById('username').value.trim();
+  const p = document.getElementById('password').value;
+  const err = document.getElementById('loginError');
+  const btn = document.getElementById('loginSubmitBtn');
+  if (u === ADMIN_CREDENTIALS.username && p === ADMIN_CREDENTIALS.password) {
+    isAdmin = true; saveAuth();
+    closeModal('loginModal');
+    showToast('Login berhasil! Selamat datang, Admin.', 'success');
+  } else {
+    err.style.display = 'block';
+    btn.style.animation = 'shake 0.4s';
+    setTimeout(() => btn.style.animation = '', 400);
+    showToast('Username atau password salah!', 'error');
+  }
+}
+function logout() {
+  isAdmin = false; saveAuth();
+  showToast('Anda telah logout.', 'success');
+  closeModal('detailModal');
+}
+
+/* ============================================================
+   FORM TABS
+   ============================================================ */
+function switchFormTab(tab) {
+  document.querySelectorAll('.form-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.form-panel').forEach(p => p.classList.remove('active'));
+  document.querySelector(`.form-tab[onclick*="'${tab}'"]`).classList.add('active');
+  document.getElementById('panel-' + tab).classList.add('active');
+}
+
+/* ============================================================
+   BAB EDITOR
+   ============================================================ */
+function addBabItem(data = null) {
+  babCounter++;
+  const list = document.getElementById('babList');
+  const emptyMsg = list.parentElement.querySelector('p');
+  if (emptyMsg) emptyMsg.style.display = 'none';
+
+  const item = document.createElement('div');
+  item.className = 'bab-item';
+  item.dataset.babId = babCounter;
+  item.innerHTML = `
+    <div class="bab-item-header">
+      <div class="bab-num">${list.children.length + 1}</div>
+      <input type="text" class="bab-title" placeholder="Judul Bab..." value="${data ? escapeHtml(data.judul) : ''}">
+    </div>
+    <div class="form-group" style="margin-bottom:10px">
+      <label style="font-size:0.75rem;color:var(--gold);margin-bottom:5px;display:block">📗 Teks Arab (RTL)</label>
+      <textarea class="arabic" placeholder="اكتب النص العربي هنا...">${data ? escapeHtml(data.arabic || '') : ''}</textarea>
+    </div>
+    <div class="form-group" style="margin-bottom:0">
+      <label style="font-size:0.75rem;color:var(--gold);margin-bottom:5px;display:block">📘 Terjemahan / Latin</label>
+      <textarea placeholder="Tulis terjemahan atau teks latin...">${data ? escapeHtml(data.latin || '') : ''}</textarea>
+    </div>
+    <div class="bab-actions">
+      <button type="button" class="bab-move" onclick="moveBabUp(this)" title="Naik">▲</button>
+      <button type="button" class="bab-move" onclick="moveBabDown(this)" title="Turun">▼</button>
+      <button type="button" class="bab-remove" onclick="removeBabItem(this)" title="Hapus">✕</button>
+    </div>
+  `;
+  list.appendChild(item);
+  renumberBabs();
+}
+
+function removeBabItem(btn) {
+  btn.closest('.bab-item').remove();
+  renumberBabs();
+  const list = document.getElementById('babList');
+  if (list.children.length === 0) {
+    const msg = list.parentElement.querySelector('p');
+    if (msg) msg.style.display = 'block';
+  }
+}
+
+function moveBabUp(btn) {
+  const item = btn.closest('.bab-item');
+  const prev = item.previousElementSibling;
+  if (prev) { item.parentNode.insertBefore(item, prev); renumberBabs(); }
+}
+function moveBabDown(btn) {
+  const item = btn.closest('.bab-item');
+  const next = item.nextElementSibling;
+  if (next) { item.parentNode.insertBefore(next, item); renumberBabs(); }
+}
+function renumberBabs() {
+  document.querySelectorAll('#babList .bab-item').forEach((el, i) => {
+    el.querySelector('.bab-num').textContent = i + 1;
+  });
+}
+function collectBabs() {
+  const babs = [];
+  document.querySelectorAll('#babList .bab-item').forEach(item => {
+    const judul = item.querySelector('.bab-title').value.trim();
+    const arabic = item.querySelector('textarea.arabic').value;
+    const latin = item.querySelectorAll('textarea')[1].value;
+    if (judul || arabic || latin) {
+      babs.push({ judul: judul || `Bab ${babs.length + 1}`, arabic, latin });
+    }
+  });
+  return babs;
+}
+
+/* ============================================================
+   PDF UPLOAD
+   ============================================================ */
+function handlePdfUpload(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  if (file.type !== 'application/pdf') {
+    showToast('Hanya file PDF yang diperbolehkan!', 'error');
+    return;
+  }
+  if (file.size > 5 * 1024 * 1024) {
+    showToast('File terlalu besar! Maksimal 5MB.', 'error');
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    currentPdfData = ev.target.result;
+    currentPdfName = file.name;
+    document.getElementById('pdfName').textContent = file.name;
+    document.getElementById('pdfSize').textContent = formatBytes(file.size);
+    document.getElementById('uploadPreview').classList.add('show');
+    showToast('PDF berhasil diunggah!', 'success');
+  };
+  reader.readAsDataURL(file);
+}
+function removePdf() {
+  currentPdfData = null;
+  currentPdfName = null;
+  document.getElementById('pdfInput').value = '';
+  document.getElementById('uploadPreview').classList.remove('show');
+}
+
+// Drag & drop
+const uploadZone = document.getElementById('uploadZone');
+['dragenter','dragover'].forEach(ev => {
+  uploadZone.addEventListener(ev, (e) => { e.preventDefault(); uploadZone.classList.add('dragover'); });
+});
+['dragleave','drop'].forEach(ev => {
+  uploadZone.addEventListener(ev, (e) => { e.preventDefault(); uploadZone.classList.remove('dragover'); });
+});
+uploadZone.addEventListener('drop', (e) => {
+  const file = e.dataTransfer.files[0];
+  if (file) {
+    document.getElementById('pdfInput').files = e.dataTransfer.files;
+    handlePdfUpload({ target: { files: [file] } });
+  }
+});
+
+/* ============================================================
+   KITAB CRUD
+   ============================================================ */
+function openKitabForm(id = null) {
+  if (!isAdmin) return;
+  const form = document.getElementById('kitabForm');
+  form.reset();
+  document.getElementById('kitabId').value = '';
+  document.getElementById('babList').innerHTML = '';
+  document.querySelector('#panel-bab p').style.display = 'block';
+  babCounter = 0;
+  removePdf();
+  switchFormTab('bab');
+
+  if (id) {
+    const kitab = kitabList.find(k => k.id === id);
+    if (!kitab) return;
+    document.getElementById('kitabModalTitle').textContent = '✏️ Edit Kitab';
+    document.getElementById('kitabId').value = kitab.id;
+    document.getElementById('kitabJudul').value = kitab.judul;
+    document.getElementById('kitabPenulis').value = kitab.penulis;
+    document.getElementById('kitabKategori').value = kitab.kategori;
+    document.getElementById('kitabDeskripsi').value = kitab.deskripsi || '';
+
+    if (kitab.tipe === 'pdf') {
+      switchFormTab('pdf');
+      if (kitab.pdfData) {
+        currentPdfData = kitab.pdfData;
+        currentPdfName = kitab.pdfName || 'kitab.pdf';
+        document.getElementById('pdfName').textContent = currentPdfName;
+        document.getElementById('pdfSize').textContent = formatBytes(kitab.pdfData.length * 0.75);
+        document.getElementById('uploadPreview').classList.add('show');
+      }
+    } else {
+      switchFormTab('bab');
+      (kitab.babs || []).forEach(b => addBabItem(b));
+    }
+  } else {
+    document.getElementById('kitabModalTitle').textContent = '➕ Tambah Kitab';
+  }
+  openModal('kitabModal');
+  setTimeout(() => document.getElementById('kitabJudul').focus(), 300);
+}
+
+function handleKitabSubmit(e) {
+  e.preventDefault();
+  if (!isAdmin) { showToast('Anda harus login sebagai admin!', 'error'); return; }
+
+  const id = document.getElementById('kitabId').value;
+  const judul = document.getElementById('kitabJudul').value.trim();
+  const penulis = document.getElementById('kitabPenulis').value.trim();
+  const kategori = document.getElementById('kitabKategori').value.trim();
+  const deskripsi = document.getElementById('kitabDeskripsi').value.trim();
+  const isPdfTab = document.querySelector('.form-tab.active').textContent.includes('PDF');
+
+  if (!judul || !penulis || !kategori) {
+    showToast('Judul, penulis, dan kategori wajib diisi!', 'error'); return;
+  }
+
+  const babs = collectBabs();
+  const btn = document.getElementById('kitabSubmitBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="loader"></span> Menyimpan...';
+
+  setTimeout(() => {
+    const data = {
+      judul, penulis, kategori, deskripsi,
+      tipe: isPdfTab ? 'pdf' : 'bab',
+      babs: isPdfTab ? [] : babs,
+      pdfData: isPdfTab ? currentPdfData : null,
+      pdfName: isPdfTab ? currentPdfName : null,
+      tanggal: new Date().toISOString().split('T')[0]
+    };
+
+    if (id) {
+      const idx = kitabList.findIndex(k => k.id === id);
+      if (idx !== -1) {
+        kitabList[idx] = { ...kitabList[idx], ...data };
+        showToast('Kitab berhasil diperbarui!', 'success');
+      }
+    } else {
+      kitabList.unshift({ id: 'kitab-' + Date.now(), ...data });
+      showToast('Kitab berhasil ditambahkan!', 'success');
+    }
+
+    saveData();
+    renderKitab(document.getElementById('searchInput').value);
+    closeModal('kitabModal');
+    btn.disabled = false;
+    btn.textContent = 'Simpan';
+  }, 400);
+}
+
+function deleteKitab(id) {
+  if (!isAdmin) return;
+  const kitab = kitabList.find(k => k.id === id);
+  if (!kitab) return;
+  document.getElementById('confirmText').innerHTML =
+    `Apakah Anda yakin ingin menghapus kitab <strong>"${escapeHtml(kitab.judul)}"</strong>?<br><span style="color:var(--text-muted);font-size:0.8rem">Tindakan ini tidak dapat dibatalkan.</span>`;
+  confirmCallback = () => {
+    kitabList = kitabList.filter(k => k.id !== id);
+    saveData();
+    renderKitab(document.getElementById('searchInput').value);
+    closeModal('detailModal');
+    closeModal('confirmModal');
+    showToast('Kitab berhasil dihapus.', 'success');
+  };
+  document.getElementById('confirmBtn').onclick = confirmCallback;
+  openModal('confirmModal');
+}
+
+/* ============================================================
+   DETAIL VIEW
+   ============================================================ */
+function openDetail(id) {
+  const kitab = kitabList.find(k => k.id === id);
+  if (!kitab) return;
+  currentDetailId = id;
+  currentDetailBab = 0;
+
+  document.getElementById('detailTitle').innerHTML = '📖 ' + escapeHtml(kitab.judul);
+  document.getElementById('detailInfo').innerHTML = `
+    <span class="chip">✍️ ${escapeHtml(kitab.penulis)}</span>
+    <span class="chip">📂 ${escapeHtml(kitab.kategori)}</span>
+    <span class="chip">📅 ${formatTanggal(kitab.tanggal)}</span>
+    ${kitab.tipe === 'pdf'
+      ? '<span class="chip">📄 Dokumen PDF</span>'
+      : `<span class="chip">📑 ${(kitab.babs || []).length} Bab</span>`}
+  `;
+
+  const body = document.getElementById('detailBody');
+
+  if (kitab.tipe === 'pdf') {
+    if (kitab.pdfData) {
+      body.innerHTML = `
+        <div class="pdf-container">
+          <embed src="${kitab.pdfData}" type="application/pdf" />
+        </div>
+        <div class="pdf-actions">
+          <a href="${kitab.pdfData}" download="${escapeHtml(kitab.pdfName || 'kitab.pdf')}" class="btn btn-gold btn-sm" style="text-decoration:none">⬇️ Download PDF</a>
+          <button class="btn btn-outline btn-sm" onclick="openPdfNewTab()">🔗 Buka di Tab Baru</button>
+        </div>
+      `;
+    } else {
+      body.innerHTML = `
+        <div style="text-align:center;padding:40px 20px;color:var(--text-muted)">
+          <div style="font-size:3rem;margin-bottom:16px">📄</div>
+          <p>File PDF belum tersedia untuk kitab ini.</p>
+          <p style="font-size:0.78rem;margin-top:8px">Silakan login sebagai admin untuk mengunggah PDF.</p>
+        </div>
+      `;
+    }
+  } else {
+    const babs = kitab.babs || [];
+    if (babs.length === 0) {
+      body.innerHTML = `
+        <div style="text-align:center;padding:40px 20px;color:var(--text-muted)">
+          <div style="font-size:3rem;margin-bottom:16px">📭</div>
+          <p>Belum ada bab untuk kitab ini.</p>
+        </div>
+      `;
+    } else {
+      body.innerHTML = `
+        <div class="bab-nav" id="babNav"></div>
+        <div id="babContentContainer"></div>
+      `;
+      const nav = document.getElementById('babNav');
+      babs.forEach((b, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'bab-nav-btn' + (i === 0 ? ' active' : '');
+        btn.textContent = `Bab ${i + 1}`;
+        btn.onclick = () => showBab(i);
+        nav.appendChild(btn);
+      });
+      showBab(0);
+    }
+  }
+
+  document.getElementById('detailAdminActions').style.display = isAdmin ? 'flex' : 'none';
+  openModal('detailModal');
+}
+
+function showBab(index) {
+  const kitab = kitabList.find(k => k.id === currentDetailId);
+  if (!kitab || !kitab.babs || !kitab.babs[index]) return;
+  currentDetailBab = index;
+  const bab = kitab.babs[index];
+
+  document.querySelectorAll('#babNav .bab-nav-btn').forEach((btn, i) => {
+    btn.classList.toggle('active', i === index);
+  });
+
+  const container = document.getElementById('babContentContainer');
+  let html = `
+    <div class="bab-content">
+      <div class="bab-content-title">
+        <span class="num-badge">${index + 1}</span>
+        ${escapeHtml(bab.judul)}
+      </div>
+  `;
+
+  if (bab.arabic && bab.latin) {
+    html += `
+      <div class="bab-bilingual">
+        <div>
+          <div class="col-label">📗 Teks Arab</div>
+          <div class="arabic-col">${escapeHtml(bab.arabic).replace(/\n/g, '<br>')}</div>
+        </div>
+        <div>
+          <div class="col-label">📘 Terjemahan</div>
+          <div class="latin-col">${escapeHtml(bab.latin).replace(/\n/g, '<br>')}</div>
+        </div>
+      </div>
+    `;
+  } else if (bab.arabic) {
+    html += `<div class="bab-content-text arabic">${escapeHtml(bab.arabic).replace(/\n/g, '<br>')}</div>`;
+  } else if (bab.latin) {
+    html += `<div class="bab-content-text">${escapeHtml(bab.latin).replace(/\n/g, '<br>')}</div>`;
+  }
+
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+function openPdfNewTab() {
+  const kitab = kitabList.find(k => k.id === currentDetailId);
+  if (kitab && kitab.pdfData) {
+    const w = window.open();
+    w.document.write(`<iframe src="${kitab.pdfData}" style="width:100%;height:100vh;border:none"></iframe>`);
+  }
+}
+
+function editFromDetail() {
+  if (currentDetailId) {
+    closeModal('detailModal');
+    setTimeout(() => openKitabForm(currentDetailId), 200);
+  }
+}
+function deleteFromDetail() {
+  if (currentDetailId) deleteKitab(currentDetailId);
+}
+
+/* ============================================================
+   TOAST
+   ============================================================ */
+function showToast(message, type = 'info') {
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = 'toast ' + (type === 'error' ? 'error' : type === 'success' ? 'success' : type === 'info' ? 'info' : '');
+  toast.textContent = message;
+  container.appendChild(toast);
+  setTimeout(() => {
+    toast.style.transition = 'all 0.4s ease';
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateX(120%)';
+    setTimeout(() => toast.remove(), 400);
+  }, 3000);
+}
+
+/* ============================================================
+   SEARCH
+   ============================================================ */
+document.getElementById('searchInput').addEventListener('input', (e) => renderKitab(e.target.value));
+
+/* ============================================================
+   INIT
+   ============================================================ */
+loadData();
+loadAuth();
+renderKitab();
+
+console.log('%c📚 Maktabah Syamilah v2', 'font-size:20px;font-weight:bold;color:#c9a84c');
+console.log('%cLogin admin: admin / admin123', 'color:#9ab8a8');
+console.log('%cFitur: Per Bab (Arab+Latin) | Upload PDF', 'color:#9ab8a8');
+</script>
+
+</body>
+</html>
